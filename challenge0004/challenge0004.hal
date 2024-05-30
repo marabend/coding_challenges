@@ -1,0 +1,16 @@
+program convertMinutesToSeconds;
+
+#include ("stdlib.hhf");
+
+var
+	minutes: int32;
+
+begin convertMinutesToSeconds;
+	
+	stdout.put("Enter minutes: ");
+	stdin.geti32();
+	mov(eax, minutes);
+	mul(60, eax);
+	stdout.puti32(eax);
+
+end convertMinutesToSeconds;
