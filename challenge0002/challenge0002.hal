@@ -1,0 +1,16 @@
+program addTwoNumbers;
+#include ("stdlib.hhf");
+
+var
+	a: int8;
+	b: int8;
+
+begin addTwoNumbers;
+
+	mov(10, a);
+	mov(10, b);
+	mov(a, al);
+	add(b, al);
+	
+	stdout.put("al = ", al, nl);
+end addTwoNumbers;
