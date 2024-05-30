@@ -1,0 +1,11 @@
+program returnTrue;
+
+#include ("stdlib.hhf");
+
+static
+bool: boolean;
+	
+begin returnTrue;
+	mov(true, bool);
+	stdout.put(bool, nl);
+end returnTrue;
