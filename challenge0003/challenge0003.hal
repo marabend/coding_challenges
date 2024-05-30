@@ -1,0 +1,18 @@
+program nextNumber;
+
+#include ("stdlib.hhf");
+
+var
+	input: int32;
+
+begin nextNumber;
+
+	stdout.put("Enter a number : ", nl);
+	stdin.get( input );
+	
+	mov(input, eax);
+	add(1, eax);
+	
+	stdout.puti32(eax);
+
+end nextNumber;
