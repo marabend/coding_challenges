@@ -103,6 +103,19 @@ sub long_burp($num) {
     "Bu" ~ $letter ~ "p"
 }
 
+sub ctoa($char) {
+    $char.ord
+}
+
+sub years_in_one_house($age, $moves) {
+    $moves == 0 ?? $age !! $age / ($moves + 1)
+}
+
+sub add($char, $txt) {
+    split($char, $txt)
+}
+
 sub MAIN() {
-    say long_burp(5)
+   # say add('#', "Mar")
+    say split(" ", "Marcel Abend")
 }
