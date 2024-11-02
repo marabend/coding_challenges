@@ -111,11 +111,54 @@ sub years_in_one_house($age, $moves) {
     $moves == 0 ?? $age !! $age / ($moves + 1)
 }
 
+# useful method to replace
 sub add($char, $txt) {
-    split($char, $txt)
+    $txt.comb.join('').trans(' ' => $char)
+}
+
+sub flip_bool($bool) {
+    !$bool
+}
+
+sub check_equals2(@lst1, @lst2) {
+    @lst1 eq @lst2
+}
+
+sub sum_lst(@lst) {
+    my $total = 0;
+    for @lst {
+        $total += $_;
+    }
+    $total
+}
+
+# useful removing the first character of a string
+sub new_word($word) {
+    substr($word, 1)
+}
+
+sub area_shape($base, $height, $shape) {
+    $shape eq "triangle" ?? 0.5 * $base * $height !! $base * $height;
+}
+
+sub half_quarter_eight($n) {
+    @($n * .5, $n * .25, $n * .125)
+}
+
+sub future_people($P, $nP) {
+    $P + 360 * $nP
+}
+
+sub star_number($n) {
+    return 6 * $n * ($n - 1) + 1
+}
+
+# useful concat strings for many times
+sub how_many_times($num) {
+    my $var ~= "a" for 1..$num;
+    "Ed" ~ $var ~ "bit"
 }
 
 sub MAIN() {
-   # say add('#', "Mar")
-    say split(" ", "Marcel Abend")
+    say how_many_times(5)
 }
