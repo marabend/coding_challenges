@@ -159,6 +159,63 @@ sub how_many_times($num) {
     "Ed" ~ $var ~ "bit"
 }
 
+# useful concat strings for many times
+sub how_many_times2($num) {
+    "Ed" ~ "a" x $num ~ "bit"
+}
+
+sub mysum($x, $y) {
+    return $x + $y #  Can be invoked as say mysum(|@(1,2))
+}
+
+sub min_max(@lst) {
+    minmax(@lst)
+}
+
+sub has_spaces($txt) {
+    $txt.contains(" ")
+}
+
+# USEFUL: count number of occurences in string
+sub count_d($sentence) {
+    $sentence.lc.indices("d").elems
+}
+
+# There must be a better way
+sub create_id($firstname, $lastname) {
+    $firstname.lc.comb[0] ~ $lastname.tclc.substr(0,3)
+}
+
+# USEFUL
+sub distance_home(@lst) {
+    @lst.sum.abs
+}
+
+sub first_last2(@lst) {
+    (@lst[0], @lst[@lst.end])
+}
+
+sub is_safe_bridge($bridge) {
+    !$bridge.contains(" ");
+}
+
+sub absolute($num) {
+    $num > 0 ?? $num !! $num * (-1)
+}
+
+sub programmers($one, $two, $three) {
+    my $sortedList = @($one, $two, $three).sort;
+    ($sortedList[0] - $sortedList[$sortedList.end]).abs
+}
+
+sub calculate($num1, $num2, $op) {
+    return ("" ~ $num1 ~ $op ~$num2).EVAL
+}
+
+sub flip($num) {
+    return $num == 0 ?? 1 !! 0
+}
+
 sub MAIN() {
-    say how_many_times(5)
+    say flip(10)
 }
