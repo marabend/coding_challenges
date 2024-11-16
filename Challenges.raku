@@ -586,11 +586,183 @@ sub transforming_lists() {
 }
 
 sub sorting_lists() {
-    # p.110
+    my $sorted = (7,5,9,3,2).sort;
+    say $sorted;
+    $sorted = <p e r l 6>.sort;
+    say $sorted;
+    $sorted = qw/a A b B c C/.sort: {$^a cmp $^b};
+    say $sorted;
+    $sorted = qw/a A b B c C/.sort: * cmp *;
+    say $sorted;
+    $sorted = qw/a A b B c C/.sort: *.fc;
+    say $sorted;
+
+    my @names = qw/
+        <John Smith>,
+        <Jane Smith>,
+        <John Doe>,
+        <Jon Smithers>,
+        <Jim Schmidt>,
+    /;
+
+    $sorted = @names.sort: {
+       # $^a.[1] leg $^b.[1] # last name
+    }
+    say $sorted;
+
+    $sorted = qw/a A b B c C/.sort: *.fc cmp *.fc;
+    say $sorted;
+}
+
+sub create_names {
+    @(
+        <Jane Smith>,
+        <Jim Schmidt>,
+        <John Doe>,
+        <John Smith>,
+        <Jon Smithers>
+    );
+}
+
+sub sorting_lists2 {
+    my @numbers = (4,6,1,9,3,2);
+    say @numbers.sort: * <=> *;
+    my @strings = create_butterflies();
+    say @strings.sort: ~*;
+    my $sorted = sort *.fc, @strings;
+    say $sorted;
+    my @names = create_names();
+    $sorted = @names.sort: *.[1];
+    say $sorted.join: "\n";
+}
+
+sub catching_exceptions {
+    try {
+        my $m = 'Hello';
+        my $value = +$m;
+        put "value is {$value.^name}";
+    }
+    put "ERROR: $! " if $!;
+    put 'Got to the end.';
+}
+
+sub catching_exceptions2 {
+    try {
+        CATCH {
+            when X::Str::Numeric {put "ERROR: {.reason}"}
+            default {put "Caught {.^name}"}
+        }
+        my $m = 'Hello';
+        my $value = +$m;
+        put "value is {$value.^name}";
+    }
+    put 'Got to the end.';
+}
+
+sub catching_exceptions3 {
+    try {
+        CATCH {
+            default {put "Caught {.^name} with [{.message}]"}
+        }
+        my $m = 'Hello';
+        my $value = +$m;
+        put "value is {$value.^name}";
+    }
+}
+
+sub my_pairs {
+    my $pair = Pair.new: 'Genus', 'Hamadryas';
+    say $pair;
+    $pair = Pair.new: 'Colors', <blue black grey>;
+    say $pair;
+    $pair = :Genus<Hamadryas>;
+    say $pair;
+    $pair = :Genus('Hamadryas');
+    say $pair;
+    say $pair = :name; # name => True
+    my $Genus = 'Hamadryas';
+    $pair = :$Genus;
+    say $pair;
+    put "{$pair.key} => {$pair.value}\n";
+    put join ' => ', $pair.kv;
+
+    # you can assign a new value only if it came from a variable storing container
+    my $name = 'Hamadryas';
+    $pair = 'Genus' => $name;
+    $pair.value = 'Papillo';
+    say $pair;
+    $pair.freeze; # but this makes it immutable
+    my $pairs = (:1st:2nd:3rd:4th);
+    say $pairs;
+}
+
+sub create_maps {
+    my $color-name-to-rgb = Map.new:
+        'red', 'FF0000',
+        'green', '00FF00',
+        'blue', '0000FF';
+
+    say $color-name-to-rgb<red>;
+
+    $color-name-to-rgb = Map.new:
+        'red' => 'FF0000',
+        'green' => '00FF00',
+        'blue' => '0000FF';
+    say $color-name-to-rgb<green>;
+    say $color-name-to-rgb{'blue'};
+    my $rgb = $color-name-to-rgb<red green>;
+    say $rgb;
+    my $color = 'blue';
+
+    if $color-name-to-rgb{$color}:exists {
+        #$color-name-to-rgb{$color} = '22DD22'; # won't work
+    }
+
+    for $color-name-to-rgb.keys {
+        #put "$^key => {$color-name-to-rgb{$^key}}";
+    }
+
+    my $rgb-values = $color-name-to-rgb.values;
+    say $rgb-values;
+
+    for $color-name-to-rgb.kv -> $name, $rgb {
+        put "$name => $rgb";
+    }
+
+    $rgb-values = $color-name-to-rgb.values;
+
+    for $color-name-to-rgb.kv {
+        put "$^k => $^v";
+    }
+}
+
+sub create_maps2 {
+    my $plus-one-seq = (1..3).map: * + 1;
+    my $double = (^3).map: {$^a + $^a}
+    say $plus-one-seq;
+    say $double;
+    my $pairs = (^3).map: {$^a => 1};
+    say $pairs;
+    $pairs = (^3).map: * => 1;
+    say $pairs;
+    $pairs = map {$^a => 1}, ^3;
+    say $pairs;
+    $pairs = map * => 1, ^3;
+    say $pairs;
+
+    my $map-things = Map.new: (^3).map: {$^a=>1};
+    say $map-things;
+
+    my $list = map {$^a, $^a * 2}, 1..3;
+    say $list;
+    say $list.elems; # nope you can fix it with slip
+    $list = map {slip $^a, $^a * 2}, 1..3;
+    put $list.elems
 }
 
 
 
 sub MAIN() {
-    say transforming_lists();
+    say create_maps2();
+    # p.164 -> Checking Allowed Values
 }
