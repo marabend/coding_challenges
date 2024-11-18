@@ -760,9 +760,137 @@ sub create_maps2 {
     put $list.elems
 }
 
+sub checking_allowed_values {
+    my @permissable_colors = <red green blue>;
+    my $permissable_colors = Map.new: @permissable_colors.map: *=> 1;
+
+    loop {
+        my $color = prompt 'Enter a color: ';
+        last unless $color;
+        if $permissable_colors{$color}:exists { # useful to identify if a value exists in a hashmap
+            put "$color is a valid color";
+        }
+        else {
+            put "$color is an invalid color";
+        }
+    }
+}
+
+sub scan-array(@list, $item) {
+    for @list {
+        return True if $^element eq $item;
+    }
+    return False;
+}
+
+sub hashmap_demo {
+    my %color-name-to-rgb =
+        'red', 'FF0000',
+        'green', '00FF00',
+        'blue', '0000FF';
+
+    %color-name-to-rgb.keys.sort().reverse;
+    my $rgb = %color-name-to-rgb<blue>:delete;
+
+    say %color-name-to-rgb;
+}
+
+sub odd-or-even {
+    if ( $_[0] %% 2 ) { 'Even' }
+    else { 'Odd' }
+}
+
+sub named_parameters(Int $a, Int :$b) {
+    $a + $b;
+}
+
+class Butterfly {
+    method who-am-i() {put "I am a " ~ self.^name}
+    method !who-am-i2($this) {put "I am a " ~ $this.^name} # defines a private method
+    has $!common-name; # defines a private attribute
+    method BUILD (:$common-name!) { #  required now
+        $!common-name = $common-name;
+    }
+
+    has Str $.common-name2 is rw = 'Unnamed butterfly';
+}
+
+sub butterfly_demo {
+    my $butterfly = Butterfly.new: :common-name('Perly Cracker');
+    put $butterfly.DEFINITE ?? 'I have an object' !! 'I have a type';
+    put $butterfly.common-name;
+}
+
+sub juctions() {
+    my $first-junction = any(1, 3, 7);
+    $first-junction = any( @(1,2,3) );
+    $first-junction = any(1..10);
+
+    my $n = 3;
+
+    if $n == any(1,3,7) {
+        put "Jep, it's inside";
+    }
+
+    if any(True,False,False) {
+        put "True is available";
+    }
+
+    if all(<Danaus Bicyclus Amauris>).contains: 'u' { # useful to check for all
+        put "Everyone has a u";
+    }
+
+    say any(2,3,4) <<+>> 1;
+
+    my $junction = any(1,-3,7);
+    my @values = gather $junction>>.take;
+    put "Values are: @values[]";
+}
+
+sub my_lovely_sets {
+    my $set = set(1,2,3,3);
+    put "$set";
+    put set(1,2,3).elems;
+}
+
+sub regex_sandbox {
+    $_ = 'Hamadryas';
+    if m/Hama/ { put 'It matched!'; }
+    else {put 'It missed!';}
+    # or
+    put m/Hama/ ?? 'It matched!' !! 'It missed!';
+
+    my $genus = 'Hamadryas';
+    put $genus ~~ m/Hama/ ?? 'It matched!' !! 'It missed!';
+
+    my @animals = @('dog', 'cat', 'mouse');
+    if @animals ~~ m/dog/ {
+        put 'Found a dog in your list!!!';
+    }
+
+    $genus = 'Hamadryas';
+    my $pattern = rx/ Hama /; # something much more complicated / Store pattern for later usage
+    $genus ~~ $pattern;
+
+    my regex hama { Hama };
+    my regex dryas {dryas};
+
+    $_ = 'Hamadryas';
+    my $result = m/<hama><dryas>/; #is applied to $_
+    say "Result:: $result";
+
+    # predefined patterns
+    my $string = "THIS IS A STRING";
+    if $string ~~ m/<upper>/ {
+        put "String includes upppercase letters";
+    }
+    
+}
+
 
 
 sub MAIN() {
-    say create_maps2();
+    regex_sandbox();
     # p.164 -> Checking Allowed Values
 }
+
